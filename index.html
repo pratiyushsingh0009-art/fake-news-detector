@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake News Detector - AI Authenticity Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">
+                    <span class="logo-icon">🔍</span>
+                    News Authenticity Analyzer
+                </h1>
+                <p class="tagline">Verify the credibility of news articles using AI & fact-checking APIs</p>
+            </div>
+            <button id="settingsToggle" class="settings-toggle">⚙️ API Settings</button>
+        </header>
+
+        <!-- Settings Modal -->
+        <div id="settingsModal" class="settings-modal hidden">
+            <div class="settings-content">
+                <div class="settings-header">
+                    <h2>API Configuration</h2>
+                    <button id="closeSettings" class="close-button">&times;</button>
+                </div>
+                <div class="settings-body">
+                    <div class="api-section">
+                        <h3>Google Fact Check API</h3>
+                        <p>Get your free API key at: <a href="https://developers.google.com/fact-check/tools/api" target="_blank">Google Fact Check API</a></p>
+                        <input type="text" id="googleFactCheckKey" placeholder="Paste your Google Fact Check API key here" class="api-input">
+                    </div>
+                    <div class="api-section">
+                        <h3>NewsAPI Key</h3>
+                        <p>Get your free API key at: <a href="https://newsapi.org/" target="_blank">NewsAPI.org</a></p>
+                        <input type="text" id="newsApiKey" placeholder="Paste your NewsAPI key here" class="api-input">
+                    </div>
+                    <div class="settings-footer">
+                        <button id="saveSettings" class="save-settings-btn">Save Settings</button>
+                        <p class="settings-note">Your API keys are stored locally in your browser. They are never sent to our servers.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Input Section -->
+            <section class="input-section">
+                <div class="section-header">
+                    <h2>Analyze a Headline or Article</h2>
+                    <p>Paste your news content below to check its authenticity</p>
+                </div>
+
+                <div class="input-wrapper">
+                    <textarea 
+                        id="newsInput" 
+                        class="news-textarea" 
+                        placeholder="Paste your news headline or article here..."
+                        maxlength="5000"
+                    ></textarea>
+                    <div class="char-count">
+                        <span id="charCount">0</span> / 5000
+                    </div>
+                </div>
+
+                <button id="analyzeBtn" class="analyze-button">
+                    <span class="button-text">Check Authenticity</span>
+                    <span class="button-icon">→</span>
+                </button>
+            </section>
+
+            <!-- Analysis Result Section -->
+            <section id="resultSection" class="result-section hidden">
+                <!-- Loading State -->
+                <div id="loadingState" class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Analyzing content for authenticity indicators...</p>
+                </div>
+
+                <!-- Result Content -->
+                <div id="resultContent" class="result-content hidden">
+                    <!-- Trust Score Card -->
+                    <div class="trust-score-card">
+                        <div class="score-circle-wrapper">
+                            <svg class="score-circle" viewBox="0 0 100 100">
+                                <circle class="score-circle-bg" cx="50" cy="50" r="45"></circle>
+                                <circle id="scoreCircleFill" class="score-circle-fill" cx="50" cy="50" r="45"></circle>
+                            </svg>
+                            <div class="score-text">
+                                <span id="trustScore" class="score-value">--</span>
+                                <span class="score-label">%</span>
+                            </div>
+                        </div>
+                        <p class="score-description">Trust Score</p>
+                    </div>
+
+                    <!-- Verdict Card -->
+                    <div class="verdict-card">
+                        <div class="verdict-header">
+                            <h3 id="verdictTitle" class="verdict-title">--</h3>
+                            <span id="verdictIcon" class="verdict-icon">⚠️</span>
+                        </div>
+                        <p id="verdictDescription" class="verdict-description">--</p>
+                    </div>
+
+                    <!-- Detailed Analysis -->
+                    <div class="analysis-details">
+                        <h3 class="details-title">Analysis Indicators</h3>
+                        <ul id="indicatorsList" class="indicators-list">
+                            <!-- Dynamically populated -->
+                        </ul>
+                    </div>
+
+                    <!-- Color Legend -->
+                    <div class="legend">
+                        <div class="legend-item">
+                            <span class="legend-color green"></span>
+                            <span>Likely Authentic (80%+)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color yellow"></span>
+                            <span>Suspicious (40-79%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color red"></span>
+                            <span>Highly Probable Misinformation (-40%)</span>
+                        </div>
+                    </div>
+
+                    <!-- New Analysis Button -->
+                    <button id="newAnalysisBtn" class="new-analysis-button">
+                        Analyze Another Article
+                    </button>
+                </div>
+            </section>
+
+            <!-- Info Section -->
+            <section class="info-section">
+                <h3>How It Works</h3>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-icon">📝</div>
+                        <h4>Text Analysis</h4>
+                        <p>Examines language patterns and writing style for suspicious indicators</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">⚙️</div>
+                        <h4>Pattern Recognition</h4>
+                        <p>Identifies clickbait, excessive caps, and inflammatory language</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🗞️</div>
+                        <h4>Source Detection</h4>
+                        <p>Cross-references against known satirical and unreliable sources</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🛡️</div>
+                        <h4>Credibility Score</h4>
+                        <p>Generates an overall trust percentage based on multiple factors</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>⚠️ <strong>Disclaimer:</strong> This tool provides an analysis indicator and should not be used as the sole source for fact-checking. Always verify information through trusted news sources and fact-checking organizations.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
